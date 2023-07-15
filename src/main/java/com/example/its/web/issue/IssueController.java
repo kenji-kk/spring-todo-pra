@@ -4,6 +4,8 @@ import com.example.its.domain.issue.IssueEntity;
 import com.example.its.domain.issue.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,11 +33,15 @@ public class IssueController {
     @GetMapping("/creationForm")
     public String showCreationForm(@ModelAttribute IssueForm issueForm) {
 //        model.addAttribute("issueForm", new IssueForm()); <- ハンドラの引数に@ModelAttributeを指定してるので不要
-        return "issues/creationFor　m";
+        return "issues/creationForm";
     }
 
     @PostMapping
-    public String create(IssueForm form,Model model) {
+    public String create(@Validated IssueForm form, BindingResult bindingResult, Model model) {
+        // bindingResultにバリデーションの結果が格納されている
+        if (bindingResult.hasErrors()) {
+            return showCreationForm(form);
+        }
         issueService.create(form.getSummary(), form.getDescription());
         // return showList(model); <- 二重サブミットされてしまうので、下記のように実装する
         return "redirect:/issues";
