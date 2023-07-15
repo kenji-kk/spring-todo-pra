@@ -31,12 +31,13 @@ public class IssueController {
     @GetMapping("/creationForm")
     public String showCreationForm(@ModelAttribute IssueForm issueForm) {
 //        model.addAttribute("issueForm", new IssueForm()); <- ハンドラの引数に@ModelAttributeを指定してるので不要
-        return "issues/creationForm";
+        return "issues/creationFor　m";
     }
 
     @PostMapping
     public String create(IssueForm form,Model model) {
         issueService.create(form.getSummary(), form.getDescription());
-        return showList(model);
+        // return showList(model); <- 二重サブミットされてしまうので、下記のように実装する
+        return "redirect:/issues";
     }
 }
