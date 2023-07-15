@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
@@ -27,7 +29,13 @@ public class IssueController {
     }
 
     @GetMapping("/creationForm")
-    public String showCreationForm() {
+    public String showCreationForm(@ModelAttribute IssueForm issueForm) {
+//        model.addAttribute("issueForm", new IssueForm()); <- ハンドラの引数に@ModelAttributeを指定してるので不要
         return "issues/creationForm";
+    }
+
+    @PostMapping
+    public String create(IssueForm form,Model model) {
+        return showList(model);
     }
 }
