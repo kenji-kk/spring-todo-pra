@@ -6,11 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
 
@@ -45,5 +42,11 @@ public class IssueController {
         issueService.create(form.getSummary(), form.getDescription());
         // return showList(model); <- 二重サブミットされてしまうので、下記のように実装する
         return "redirect:/issues";
+    }
+
+    @GetMapping("/{issueId}")
+    public String showDetail(@PathVariable("issueId") long issueId, Model model) {
+        model.addAttribute("issue", issueService.findById(issueId));
+        return "issues/detail";
     }
 }

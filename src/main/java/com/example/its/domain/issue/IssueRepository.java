@@ -14,4 +14,7 @@ public interface IssueRepository {
 
     @Insert("insert into issues (summary, description) values (#{summary}, #{description})") // Mybatisの記法でメソッドの引数で受け取ったものを#{}で埋め込める
     void insert(String summary, String description);
+
+    @Select("select * from issues where id = #{issueId}")
+    IssueEntity findById(long issueId);
 }
